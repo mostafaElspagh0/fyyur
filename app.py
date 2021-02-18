@@ -146,12 +146,20 @@ def create_venue_submission():
     try:
         venue = Venue()
         venue.name = request.form['name']
-        venue.city = City.query.filter(City.name == request.form['city']).first()
-        venue.state = State.query.filter(State.name == request.form['state']).first()
+        temp_state = State.query.filter(State.name == request.form['state']).one_or_none()
+        if temp_state is None:
+            temp_state = State(name=request.form['state'])
+            db.session.add(temp_state)
+        venue.state = temp_state
+        temp_city = City.query.filter(City.name == request.form['city']).one_or_none()
+        if temp_city is None:
+            temp_city = City(name=request.form['city'], state_id=temp_state.id)
+            db.session.add(temp_city)
+        venue.city = temp_city
         venue.address = request.form['address']
         venue.phone = request.form['phone']
-        venue.genres = [Genre.query.filter(Genre.name == g).one_or_none() for g in
-                        request.form.getlist('genres')]  # convert list to string
+        venue.genres = [Genre.query.filter(Genre.name == genre_name.strip()).one_or_none() for genre_name in
+                        request.form.getlist('genres')]
         venue.facebook_link = request.form['facebook_link']
         db.session.add(venue)
         db.session.commit()
