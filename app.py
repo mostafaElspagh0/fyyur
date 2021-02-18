@@ -97,7 +97,7 @@ def show_venue(venue_id):
     upcoming_shows = []
     now = datetime.now()
     for show in venue.shows:
-        if show.start_time > now :
+        if show.start_time > now:
             upcoming_shows.append(show)
         else:
             past_shows.append(show)
@@ -168,17 +168,11 @@ def delete_venue(venue_id):
 #  ----------------------------------------------------------------
 @app.route('/artists')
 def artists():
-    # TODO: replace with real data returned from querying the database
     data = [{
-        "id": 4,
-        "name": "Guns N Petals",
-    }, {
-        "id": 5,
-        "name": "Matt Quevedo",
-    }, {
-        "id": 6,
-        "name": "The Wild Sax Band",
-    }]
+        "id": artist.id,
+        "name": artist.name,
+    } for artist
+        in Artist.query.all()]
     return render_template('pages/artists.html', artists=data)
 
 
