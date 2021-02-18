@@ -1,5 +1,5 @@
 from app import db
-from .StateModel import State
+from models.StateModel import State
 
 
 class City(db.Model):
@@ -13,3 +13,4 @@ class City(db.Model):
 
     # relations
     venues = db.relationship('Venue', backref='city', lazy=True)
+    venues = db.relationship('Artist', backref='city', lazy=True)
