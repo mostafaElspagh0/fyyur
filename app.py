@@ -98,10 +98,17 @@ def show_venue(venue_id):
     upcoming_shows = []
     now = datetime.now()
     for show in venue.shows:
+        artist = Artist
+        show_data = {
+            "artist_id": show.artist_id,
+            "artist_name": artist.name,
+            "artist_image_link": artist.image_link,
+            "start_time": str(show.start_time)
+        }
         if show.start_time > now:
-            upcoming_shows.append(show)
+            upcoming_shows.append(show_data)
         else:
-            past_shows.append(show)
+            past_shows.append(show_data)
     data = {
         "id": venue.id,
         "name": venue.name,
@@ -115,18 +122,8 @@ def show_venue(venue_id):
         "seeking_talent": venue.seeking_talent,
         "seeking_description": venue.seeking_description,
         "image_link": venue.image_link,
-        "past_shows": [{
-            "artist_id": show.artist_id,
-            "artist_name": show.artist.name,
-            "artist_image_link": show.artist.image_link,
-            "start_time": show.start_time
-        } for show in past_shows],
-        "upcoming_shows": [{
-            "artist_id": show.artist_id,
-            "artist_name": show.artist.name,
-            "artist_image_link": show.artist.image_link,
-            "start_time": show.start_time
-        } for show in past_shows],
+        "past_shows": past_shows,
+        "upcoming_shows": upcoming_shows,
         "past_shows_count": len(past_shows),
         "upcoming_shows_count": len(upcoming_shows),
     }
