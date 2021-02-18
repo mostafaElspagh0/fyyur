@@ -1,7 +1,7 @@
 from app import db
-from models.StateModel import State
-from models.CityModel import City
-from models.GenreModel import Genre
+from .StateModel import State
+from .CityModel import City
+from .GenreModel import Genre
 
 venue_genreTable = db.Table('venue_genre_table',
                             db.Column('genre_id', db.Integer, db.ForeignKey(f'{Genre.__tablename__}.id'),

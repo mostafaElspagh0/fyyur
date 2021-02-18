@@ -1,5 +1,5 @@
 from app import db
-from models.StateModel import State
+from .StateModel import State
 
 
 class City(db.Model):

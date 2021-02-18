@@ -1,7 +1,7 @@
 from app import db
-from models.CityModel import City
-from models.StateModel import State
-from models.GenreModel import Genre
+from .CityModel import City
+from .StateModel import State
+from .GenreModel import Genre
 
 
 artist_genre_table = db.Table('artist_genre_table',
