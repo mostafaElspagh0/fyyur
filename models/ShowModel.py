@@ -13,4 +13,4 @@ class Show(db.Model):
     duration_inMinutes = db.Column(db.Integer , nullable=False ,default=100)
 
     def __repr__(self):
-        return f'<User {self.id}, {self.start_time}, {self.duration_inMinutes}>'
+        return f'<Show {self.id}, {self.start_time}, {self.duration_inMinutes}>'
