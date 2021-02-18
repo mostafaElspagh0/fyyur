@@ -1,7 +1,14 @@
 from app import db
 from models.StateModel import State
 from models.CityModel import City
-from models.SeconderyTables import venue_genreTable
+from models.GenreModel import Genre
+
+venue_genreTable = db.Table('venue_genre_table',
+                            db.Column('genre_id', db.Integer, db.ForeignKey(f'{Genre.__tablename__}.id'),
+                                      primary_key=True),
+                            db.Column('venue_id', db.Integer, db.ForeignKey(f'venues.id'),
+                                      primary_key=True)
+                            )
 
 
 class Venue(db.Model):

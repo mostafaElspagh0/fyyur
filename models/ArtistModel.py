@@ -1,7 +1,15 @@
 from app import db
 from models.CityModel import City
 from models.StateModel import State
-from models.SeconderyTables import artist_genre_table
+from models.GenreModel import Genre
+
+
+artist_genre_table = db.Table('artist_genre_table',
+                              db.Column('genre_id', db.Integer, db.ForeignKey(f'{Genre.__tablename__}.id'),
+                                        primary_key=True),
+                              db.Column('artist_id', db.Integer, db.ForeignKey(f'artists.id'),
+                                        primary_key=True)
+                              )
 
 
 class Artist(db.Model):
@@ -23,4 +31,3 @@ class Artist(db.Model):
     # relations
     shows = db.relationship('Show', backref='artist', lazy=True)
     genres = db.relationship('Genre', secondary=artist_genre_table, backref=db.backref('artists'))
-
