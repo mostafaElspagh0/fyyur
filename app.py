@@ -338,15 +338,38 @@ def create_artist_form():
 
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
-    # called upon submitting the new artist listing form
-    # TODO: insert form data as a new Venue record in the db, instead
-    # TODO: modify data to be the data object returned from db insertion
-
-    # on successful db insert, flash success
-    flash('Artist ' + request.form['name'] + ' was successfully listed!')
-    # TODO: on unsuccessful db insert, flash an error instead.
-    # e.g., flash('An error occurred. Artist ' + data.name + ' could not be listed.')
-    return render_template('pages/home.html')
+    error = False
+    try:
+        artist = Artist()
+        artist.name = request.form['name']
+        temp_state = State.query.filter(State.name == request.form['state']).one_or_none()
+        if temp_state is None:
+            temp_state = State(name=request.form['state'])
+            db.session.add(temp_state)
+        artist.state = temp_state
+        temp_city = City.query.filter(City.name == request.form['city']).one_or_none()
+        if temp_city is None:
+            temp_city = City(name=request.form['city'], state_id=temp_state.id)
+            db.session.add(temp_city)
+        artist.city = temp_city
+        artist.address = request.form['address']
+        artist.phone = request.form['phone']
+        artist.genres = [Genre.query.filter(Genre.name == genre_name.strip()).one_or_none() for genre_name in
+                        request.form.getlist('genres')]
+        artist.facebook_link = request.form['facebook_link']
+        db.session.add(artist)
+        db.session.commit()
+    except Exception:
+        error = True
+        db.session.rollback()
+        print(sys.exc_info())
+    finally:
+        db.session.close()
+        if error:
+            flash('An error occurred. Venue ' + request.form['name'] + ' could not be listed.')
+        else:
+            flash('Venue ' + request.form['name'] + ' was successfully listed!')
+        return render_template('pages/home.html')
 
 
 #  Shows
