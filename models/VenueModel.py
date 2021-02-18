@@ -1,6 +1,6 @@
 from app import db
-from .StateModel import State
-from .CityModel import City
+from models.StateModel import State
+from models.CityModel import City
 
 
 class Venue(db.Model):
@@ -12,6 +12,10 @@ class Venue(db.Model):
     phone = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(500))
+    website = db.Column(db.String(500))
+    seeking_talent = db.Column(db.Boolean)
+    seeking_description = db.Column(db.String(500))
+    genres = db.Column(db.String(500))
 
     # foreign keys
     city_id = db.Column(db.Integer, db.ForeignKey(f'{City.__tablename__}.id'))
@@ -19,5 +23,3 @@ class Venue(db.Model):
 
     # relations
     shows = db.relationship('Show', backref='venue', lazy=True)
-
-    # TODO: implement any missing fields, as a database migration using Flask-Migrate
