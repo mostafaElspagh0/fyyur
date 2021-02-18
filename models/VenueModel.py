@@ -31,3 +31,6 @@ class Venue(db.Model):
     # relations
     shows = db.relationship('Show', backref='venue', lazy=True)
     genres = db.relationship('Genre', secondary=venue_genreTable, backref=db.backref('venues'))
+
+    def __repr__(self):
+        return f'<Venue {self.id}, {self.name}>'

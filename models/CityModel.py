@@ -14,3 +14,6 @@ class City(db.Model):
     # relations
     venues = db.relationship('Venue', backref='city', lazy=True)
     venues = db.relationship('Artist', backref='city', lazy=True)
+
+    def __repr__(self):
+        return f'<City {self.id}, {self.name}>'

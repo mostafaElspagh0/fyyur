@@ -31,3 +31,6 @@ class Artist(db.Model):
     # relations
     shows = db.relationship('Show', backref='artist', lazy=True)
     genres = db.relationship('Genre', secondary=artist_genre_table, backref=db.backref('artists'))
+
+    def __repr__(self):
+        return f'<Artist {self.id}, {self.name}>'
