@@ -70,7 +70,7 @@ def venues():
                 Show.start_time > datetime.now()).count(),
         } for venue in city.venues]
     } for city in City.query.all()]
-    return render_template('pages/venues.html', areas=data);
+    return render_template('pages/venues.html', areas=data)
 
 
 @app.route('/venues/search', methods=['POST'])
@@ -93,7 +93,8 @@ def search_venues():
 @app.route('/venues/<int:venue_id>')
 def show_venue(venue_id):
     venue = Venue.query.get(venue_id)
-    if venue is None: abort(404)
+    if venue is None:
+        abort(404)
     past_shows = []
     upcoming_shows = []
     now = datetime.now()
