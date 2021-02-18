@@ -10,6 +10,7 @@ class State(db.Model):
     # relations
     cities = db.relationship('City', backref='state', lazy=True)
     venues = db.relationship('Venue', backref='state', lazy=True)
+    artists = db.relationship('Artist', backref='state', lazy=True)
 
     def __repr__(self):
         return f'<State {self.id}, {self.name}>'
