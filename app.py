@@ -29,7 +29,7 @@ migrate = Migrate(app,db)
 #----------------------------------------------------------------------------#
 
 
-from .models.models import *
+from models.models import *
 
 
 # TODO Implement Show and Artist models, and complete all model relationships and properties, as a database migration.
