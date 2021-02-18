@@ -1,2 +1,5 @@
 #jetbrains config files
 .idea
+
+#dia temp files
+erd.dia.autosave
