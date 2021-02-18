@@ -12,6 +12,10 @@ class Artist(db.Model):
     genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    website = db.Column(db.String(500))
+    seeking_venue = db.Column(db.Boolean)
+    seeking_description = db.Column(db.String(500))
+    genres = db.Column(db.String(500))
 
     # foreign keys
     city_id = db.Column(db.Integer, db.ForeignKey(f'{City.__tablename__}.id'))
@@ -19,4 +23,3 @@ class Artist(db.Model):
 
     # relations
     shows = db.relationship('Show', backref='artist', lazy=True)
-    # TODO: implement any missing fields, as a database migration using Flask-Migrate
