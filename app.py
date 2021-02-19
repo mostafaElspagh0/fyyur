@@ -158,8 +158,12 @@ def create_venue_submission():
         venue.city = temp_city
         venue.address = request.form['address']
         venue.phone = request.form['phone']
-        venue.genres = [Genre.query.filter(Genre.name == genre_name.strip()).one_or_none() for genre_name in
-                        request.form.getlist('genres')]
+        temp_genres = []
+        for genre_name in request.form.getlist('genres'):
+            genre = Genre.query.filter(Genre.name == genre_name.strip()).one_or_none()
+            if genre is not None:
+                temp_genres.append(genre)
+        venue.genres = temp_genres
         venue.facebook_link = request.form['facebook_link']
         db.session.add(venue)
         db.session.commit()
