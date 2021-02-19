@@ -1,8 +1,20 @@
 from datetime import datetime
 from flask_wtf import Form
-from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField,TextAreaField
+from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField, TextAreaField
 from wtforms.validators import DataRequired, AnyOf, URL
-from enums import State
+from enums import State, Genre
+
+
+def genre_validate():
+    message = 'Invalid genre value.'
+    values = [g.value for g in Genre]
+
+    def _validate(form, field):
+        for value in field.data:
+            if value not in values:
+                raise ValidationError(message)
+
+    return _validate
 
 
 class ShowForm(Form):
@@ -44,29 +56,8 @@ class VenueForm(Form):
         'image_link'
     )
     genres = SelectMultipleField(
-        # TODO implement enum restriction
-        'genres', validators=[DataRequired()],
-        choices=[
-            ('Alternative', 'Alternative'),
-            ('Blues', 'Blues'),
-            ('Classical', 'Classical'),
-            ('Country', 'Country'),
-            ('Electronic', 'Electronic'),
-            ('Folk', 'Folk'),
-            ('Funk', 'Funk'),
-            ('Hip-Hop', 'Hip-Hop'),
-            ('Heavy Metal', 'Heavy Metal'),
-            ('Instrumental', 'Instrumental'),
-            ('Jazz', 'Jazz'),
-            ('Musical Theatre', 'Musical Theatre'),
-            ('Pop', 'Pop'),
-            ('Punk', 'Punk'),
-            ('R&B', 'R&B'),
-            ('Reggae', 'Reggae'),
-            ('Rock n Roll', 'Rock n Roll'),
-            ('Soul', 'Soul'),
-            ('Other', 'Other'),
-        ]
+        'genres', validators=[DataRequired(), genre_validate()],
+        choices=[(genre.value, genre.value) for genre in Genre]
     )
     facebook_link = StringField(
         'facebook_link', validators=[URL()]
@@ -77,6 +68,7 @@ class VenueForm(Form):
     )
     seeking_talent = BooleanField('seeking_talent')
     seeking_description = TextAreaField('seeking_description')
+
 
 class ArtistForm(Form):
     name = StringField(
