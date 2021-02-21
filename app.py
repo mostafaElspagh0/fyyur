@@ -17,9 +17,7 @@ from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
-from forms import *
 from flask_migrate import Migrate
-import sys
 
 # ----------------------------------------------------------------------------#
 # App Config.
@@ -66,17 +64,6 @@ def index():
 
 from controllers import *
 
-
-@app.errorhandler(404)
-def not_found_error(error):
-    return render_template('errors/404.html'), 404
-
-
-@app.errorhandler(500)
-def server_error(error):
-    return render_template('errors/500.html'), 500
-
-
 if not app.debug:
     file_handler = FileHandler('error.log')
     file_handler.setFormatter(
@@ -91,13 +78,5 @@ if not app.debug:
 # Launch.
 # ----------------------------------------------------------------------------#
 
-# Default port:
 if __name__ == '__main__':
     app.run()
-
-# Or specify port manually:
-'''
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port)
-'''
