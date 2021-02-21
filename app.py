@@ -114,7 +114,7 @@ def show_venue(venue_id):
     data = {
         "id": venue.id,
         "name": venue.name,
-        "genres": ','.join([genre.name for genre in venue.genres]),
+        "genres": [genre.name for genre in venue.genres],
         "address": venue.address,
         "city": venue.city.name,
         "state": venue.state.name,
@@ -167,7 +167,7 @@ def create_venue_submission():
         venue.genres = temp_genres
         venue.facebook_link = request.form['facebook_link']
         venue.website = request.form['website']
-        venue.seeking_talent = request.form['seeking_talent']
+        venue.seeking_talent = request.form['seeking_talent'] == 'y'
         venue.seeking_description = request.form['seeking_description']
         db.session.add(venue)
         db.session.commit()
@@ -260,7 +260,7 @@ def show_artist(artist_id):
     data = {
         "id": artist.id,
         "name": artist.name,
-        "genres": ','.join([genre.name for genre in artist.genres]),
+        "genres": [genre.name for genre in artist.genres],
         "city": artist.city.name,
         "state": artist.state.name,
         "phone": artist.phone,
@@ -288,7 +288,7 @@ def edit_artist(artist_id):
         form.city.data = artist.city.name
         form.state.data = artist.state.name
         form.phone.data = artist.phone
-        form.genres.data = ','.join([genre.name for genre in artist.genres])
+        form.genres.data = [genre.name for genre in artist.genres]
         form.facebook_link.data = artist.facebook_link
         form.image_link.data = artist.image_link
         form.website.data = artist.website
@@ -351,7 +351,7 @@ def edit_venue(venue_id):
         form.state.data = venue.state.name
         form.phone.data = venue.phone
         form.address.data = venue.address
-        form.genres.data = ','.join([genre.name for genre in venue.genres])
+        form.genres.data = [genre.name for genre in venue.genres]
         form.facebook_link.data = venue.facebook_link
         form.image_link.data = venue.image_link
         form.website.data = venue.website
