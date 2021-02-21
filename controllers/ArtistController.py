@@ -1,11 +1,11 @@
 import sys
+from datetime import datetime
+
 from app import (
     app,
     db,
-    VenueForm,
-    datetime,
-    ArtistForm
 )
+from forms import ArtistForm, VenueForm
 from models import *
 from flask import (
     render_template,

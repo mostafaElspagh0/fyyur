@@ -1,9 +1,9 @@
 import sys
+from datetime import datetime
+from forms import VenueForm
 from app import (
     app,
-    db,
-    VenueForm,
-    datetime
+    db
 )
 from models import *
 from flask import render_template, request, abort, flash
