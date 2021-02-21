@@ -1,4 +1,7 @@
 import os
+
+from database_uri import DatabaseUri
+
 SECRET_KEY = os.urandom(32)
 # Grabs the folder where the script runs.
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -9,6 +12,6 @@ DEBUG = True
 # Connect to the database
 
 
-SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI')
+SQLALCHEMY_DATABASE_URI = str(DatabaseUri())
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
