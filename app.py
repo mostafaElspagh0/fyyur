@@ -114,7 +114,7 @@ def show_venue(venue_id):
     data = {
         "id": venue.id,
         "name": venue.name,
-        "genres": [genre.name for genre in venue.genres],
+        "genres": ','.join([genre.name for genre in venue.genres]),
         "address": venue.address,
         "city": venue.city.name,
         "state": venue.state.name,
@@ -260,7 +260,7 @@ def show_artist(artist_id):
     data = {
         "id": artist.id,
         "name": artist.name,
-        "genres": [genre.name for genre in artist.genres],
+        "genres": ','.join([genre.name for genre in artist.genres]),
         "city": artist.city.name,
         "state": artist.state.name,
         "phone": artist.phone,
@@ -285,10 +285,10 @@ def edit_artist(artist_id):
     artist = Artist.query.get(artist_id)
     if artist:
         form.name.data = artist.name
-        form.city.data = artist.city
-        form.state.data = artist.state
+        form.city.data = artist.city.name
+        form.state.data = artist.state.name
         form.phone.data = artist.phone
-        form.genres.data = artist.genres
+        form.genres.data = ','.join([genre.name for genre in artist.genres])
         form.facebook_link.data = artist.facebook_link
         form.image_link.data = artist.image_link
         form.website.data = artist.website
@@ -303,10 +303,23 @@ def edit_artist_submission(artist_id):
     artist = Artist.query.get(artist_id)
     try:
         artist.name = request.form['name']
-        artist.city = request.form['city']
-        artist.state = request.form['state']
+        temp_state = State.query.filter(State.name == request.form['state']).one_or_none()
+        if temp_state is None:
+            temp_state = State(name=request.form['state'])
+            db.session.add(temp_state)
+        artist.state = temp_state
+        temp_city = City.query.filter(City.name == request.form['city']).one_or_none()
+        if temp_city is None:
+            temp_city = City(name=request.form['city'], state_id=temp_state.id)
+            db.session.add(temp_city)
+        artist.city = temp_city
         artist.phone = request.form['phone']
-        artist.genres = request.form.getlist('genres')
+        temp_genres = []
+        for genre_name in request.form.getlist('genres'):
+            genre = Genre.query.filter(Genre.name == genre_name.strip()).one_or_none()
+            if genre is not None:
+                temp_genres.append(genre)
+        artist.genres = temp_genres
         artist.image_link = request.form['image_link']
         artist.facebook_link = request.form['facebook_link']
         artist.website = request.form['website']
@@ -334,11 +347,11 @@ def edit_venue(venue_id):
 
     if venue:
         form.name.data = venue.name
-        form.city.data = venue.city
-        form.state.data = venue.state
+        form.city.data = venue.city.name
+        form.state.data = venue.state.name
         form.phone.data = venue.phone
         form.address.data = venue.address
-        form.genres.data = venue.genres
+        form.genres.data = ','.join([genre.name for genre in venue.genres])
         form.facebook_link.data = venue.facebook_link
         form.image_link.data = venue.image_link
         form.website.data = venue.website
@@ -354,11 +367,24 @@ def edit_venue_submission(venue_id):
 
     try:
         venue.name = request.form['name']
-        venue.city = request.form['city']
-        venue.state = request.form['state']
+        temp_state = State.query.filter(State.name == request.form['state']).one_or_none()
+        if temp_state is None:
+            temp_state = State(name=request.form['state'])
+            db.session.add(temp_state)
+        venue.state = temp_state
+        temp_city = City.query.filter(City.name == request.form['city']).one_or_none()
+        if temp_city is None:
+            temp_city = City(name=request.form['city'], state_id=temp_state.id)
+            db.session.add(temp_city)
+        venue.city = temp_city
         venue.address = request.form['address']
         venue.phone = request.form['phone']
-        venue.genres = request.form.getlist('genres')
+        temp_genres = []
+        for genre_name in request.form.getlist('genres'):
+            genre = Genre.query.filter(Genre.name == genre_name.strip()).one_or_none()
+            if genre is not None:
+                temp_genres.append(genre)
+        venue.genres = temp_genres
         venue.image_link = request.form['image_link']
         venue.facebook_link = request.form['facebook_link']
         venue.website = request.form['website']
