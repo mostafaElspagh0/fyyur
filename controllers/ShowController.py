@@ -41,6 +41,10 @@ def create_shows():
 @app.route('/shows/create', methods=['POST'])
 def create_show_submission():
     error = False
+    form = ShowForm(request.form)
+    if not form.validate_on_submit():
+        flash('An error occurred. Show could not be listed.')
+        return render_template('pages/home.html')
     # noinspection PyBroadException
     try:
         artist_id = request.form['artist_id']
