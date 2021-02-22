@@ -49,22 +49,29 @@ def show_artist(artist_id):
     artist = Artist.query.get(int(artist_id))
     if artist is None:
         abort(404)
-    artist_show = artist.shows
-    now = datetime.now()
+    past_shows_query = db.session.query(Show).join(Venue).filter(Show.artist_id == artist_id).filter(
+        Show.start_time > datetime.now()).all()
     past_shows = []
-    upcoming_shows = []
-    for show in artist_show:
-        venue = show.venue
-        show_data = {
+
+    for show in past_shows_query:
+        past_shows.append({
             "venue_id": show.venue_id,
-            "venue_name": venue.name,
-            "venue_image_link": venue.image_link,
+            "venue_name": show.venue.name,
+            "artist_image_link": show.venue.image_link,
             "start_time": str(show.start_time)
-        }
-        if show.start_time > now:
-            upcoming_shows.append(show_data)
-        else:
-            past_shows.append(show_data)
+        })
+
+    upcoming_shows_query = db.session.query(Show).join(Venue).filter(Show.artist_id == artist_id).filter(
+        Show.start_time < datetime.now()).all()
+    upcoming_shows = []
+
+    for show in upcoming_shows_query:
+        upcoming_shows.append({
+            "venue_id": show.venue_id,
+            "venue_name": show.venue.name,
+            "artist_image_link": show.venue.image_link,
+            "start_time": str(show.start_time)
+        })
 
     data = {
         "id": artist.id,

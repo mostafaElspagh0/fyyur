@@ -15,7 +15,7 @@ from flask import (
 @app.route('/shows')
 def shows():
     # displays list of shows at /shows
-    shows_data = Show.query.all()
+    shows_data = db.session.query(Show).join(Artist).join(Venue).all()
     data = []
     for show in shows_data:
         artist = show.artist
