@@ -118,7 +118,7 @@ def create_venue_submission():
         venue.genres = temp_genres
         venue.facebook_link = request.form['facebook_link']
         venue.website = request.form['website']
-        venue.seeking_talent = request.form['seeking_talent'] == 'y'
+        venue.seeking_talent = 'seeking_talent' in request.form.keys()
         venue.seeking_description = request.form['seeking_description']
         db.session.add(venue)
         db.session.commit()
