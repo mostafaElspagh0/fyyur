@@ -90,6 +90,10 @@ def create_venue_form():
 
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
+    form = VenueForm(request.form)
+    if not form.validate_on_submit():
+        flash('An error occurred. Venue ' + request.form['name'] + ' could not be listed.')
+        return render_template('pages/home.html')
     error = False
     try:
         venue = Venue()
