@@ -21,6 +21,7 @@ def venues():
                 Show.start_time > datetime.now()).count(),
         } for venue in city.venues]
     } for city in City.query.all()]
+    data = filter(lambda a: len(a['venues']) > 0, data)
     return render_template('pages/venues.html', areas=data)
 
 
