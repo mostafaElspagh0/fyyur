@@ -156,6 +156,7 @@ def delete_venue(venue_id):
     # BONUS CHALLENGE: Implement a button to delete a Venue on a Venue Page, have it so that
     # clicking that button delete it from the db then redirect the user to the homepage
 
+
 @app.route('/venues/<int:venue_id>/edit', methods=['GET'])
 def edit_venue(venue_id):
     form = VenueForm()
@@ -180,7 +181,10 @@ def edit_venue(venue_id):
 def edit_venue_submission(venue_id):
     error = False
     venue = Venue.query.get(venue_id)
-
+    form = VenueForm(request.form)
+    if not form.validate_on_submit():
+        flash(f'An error occurred. Venue could not be changed.')
+        return redirect(url_for('show_venue', venue_id=venue_id))
     try:
         venue.name = request.form['name']
         temp_state = State.query.filter(State.name == request.form['state']).one_or_none()
@@ -219,4 +223,3 @@ def edit_venue_submission(venue_id):
     if not error:
         flash(f'Venue was successfully updated!')
     return redirect(url_for('show_venue', venue_id=venue_id))
-
