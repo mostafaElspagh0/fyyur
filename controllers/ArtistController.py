@@ -108,6 +108,10 @@ def edit_artist(artist_id):
 
 @app.route('/artists/<int:artist_id>/edit', methods=['POST'])
 def edit_artist_submission(artist_id):
+    form = ArtistForm(request.form)
+    if not form.validate_on_submit():
+        flash('An error occurred. Artist could not be changed.')
+        return render_template('pages/home.html')
     error = False
     artist = Artist.query.get(artist_id)
     try:
@@ -136,7 +140,7 @@ def edit_artist_submission(artist_id):
         artist.seeking_description = request.form['seeking_description']
 
         db.session.commit()
-    except:
+    except Exception:
         error = True
         db.session.rollback()
         print(sys.exc_info())
@@ -147,7 +151,6 @@ def edit_artist_submission(artist_id):
     if not error:
         flash('Artist was successfully updated!')
     return redirect(url_for('show_artist', artist_id=artist_id))
-
 
 
 #  Create Artist
@@ -161,6 +164,10 @@ def create_artist_form():
 
 @app.route('/artists/create', methods=['POST'])
 def create_artist_submission():
+    form = ArtistForm(request.form)
+    if not form.validate_on_submit():
+        flash('An error occurred. Artist ' + request.form['name'] + ' could not be listed.')
+        return render_template('pages/home.html')
     error = False
     try:
         artist = Artist()
